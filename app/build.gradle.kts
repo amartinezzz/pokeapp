@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.amartinez.pokeapp"
-        minSdk = 26
+        minSdk = 28
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -96,4 +96,13 @@ dependencies {
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.paging.compose.v330)
+
+    // Jetpack DataStore Preferences
+    implementation(libs.androidx.datastore.preferences)
+
+    //Biometria
+    implementation(libs.androidx.biometric)
 }

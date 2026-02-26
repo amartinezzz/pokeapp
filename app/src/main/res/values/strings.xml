@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">PokeApp</string>
+
+    <string name="sign_up_message">Welcome to PokeApp.\n\nCreate your access control to enjoy all the features and stay up to date. It only takes a minute!"</string>
+    <string name="sign_up_user">User</string>
+    <string name="sign_up_password">Password</string>
+    <string name="sign_up_confirm_password">Confirm password</string>
+    <string name="sign_up_min_length">min. 6 characters</string>
+    <string name="sign_up_forgot_password">Forgot password?</string>
+    <string name="sign_up_continue">Continue</string>
+    <string name="sign_in_register">Don´t have an account?\u0020</string>
+    <string name="sign_in_register_highlighted">Sign up</string>
+
+    <string name="sign_in_message">Identify yourself, Trainer!</string>
+    <string name="sign_in_user">User</string>
+    <string name="sign_in_password">Password</string>
+
+    <string name="detail_about_title">About</string>
+    <string name="detail_weight">Weight</string>
+    <string name="detail_height">Height</string>
+    <string name="detail_abilities">Abilities</string>
+    <string name="detail_stats_title">Base Stats</string>
+
+    <string name="weight_unit">kg</string>
+    <string name="height_unit">m</string>
+</resources>
