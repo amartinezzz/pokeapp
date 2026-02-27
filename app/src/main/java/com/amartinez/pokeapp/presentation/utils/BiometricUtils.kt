@@ -1,7 +1,6 @@
 package com.amartinez.pokeapp.presentation.utils
 
 import android.content.Context
-import android.util.Log
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
 

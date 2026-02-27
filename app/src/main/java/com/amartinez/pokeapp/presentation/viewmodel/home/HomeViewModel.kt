@@ -6,14 +6,16 @@ import androidx.paging.cachedIn
 import com.amartinez.pokeapp.domain.usecase.home.FetchAllPokemonUseCase
 import com.amartinez.pokeapp.domain.usecase.home.MarkPokemonAsFavoriteUseCase
 import com.amartinez.pokeapp.domain.usecase.home.SearchPokemonUseCase
-import com.amartinez.pokeapp.presentation.state.home.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -22,24 +24,23 @@ class HomeViewModel @Inject constructor(
     private val searchPokemonUseCase: SearchPokemonUseCase,
     private val markPokemonAsFavoriteUseCase: MarkPokemonAsFavoriteUseCase
 ) : ViewModel() {
-    //val pagerFlow = searchPokemonUseCase().cachedIn(viewModelScope)
-
-    private val _uiState = MutableStateFlow(HomeUiState())
-    val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val isDone = fetchAllPokemonUseCase()
-            if(isDone) {
-                val pagerFlow = searchPokemonUseCase()
-                _uiState.update { state ->
-                    state.copy(
-                        items = pagerFlow
-                    )
-                }
-            }
+            fetchAllPokemonUseCase()
         }
     }
+
+    @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
+    val pokemonPagingData = _searchQuery
+        .debounce(300)
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            searchPokemonUseCase(query)
+        }
+        .cachedIn(viewModelScope)
 
     fun markAsFavorite(id: Long, currentFavoriteStatus: Boolean) {
         viewModelScope.launch (Dispatchers.IO) {
@@ -47,17 +48,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onFilterChange(value: String) {
-        _uiState.update { state ->
-            state.copy(
-                filter = value
-            )
-        }
-        val pagerFlow = searchPokemonUseCase()
-        _uiState.update { state ->
-            state.copy(
-                items = pagerFlow
-            )
-        }
+    fun onQueryChanged(newQuery: String) {
+        _searchQuery.value = newQuery
     }
 }

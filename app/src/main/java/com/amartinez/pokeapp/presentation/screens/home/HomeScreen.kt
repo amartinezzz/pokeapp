@@ -10,11 +10,12 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.amartinez.pokeapp.presentation.components.BodyStructure
@@ -27,15 +28,15 @@ fun HomeScreen(
     goToDetail: (Long?) -> Unit
 ) {
     val viewModel: HomeViewModel = hiltViewModel()
-    val state = viewModel.uiState.collectAsStateWithLifecycle()
+    val query by viewModel.searchQuery.collectAsState()
 
     BodyStructure(header = {
         Row {
             TextFieldComponent(
-                value = state.value.filter,
+                value = query,
                 icon = Icons.Default.Search,
                 placeholder = "Search",
-                onValueChange = viewModel::onFilterChange,
+                onValueChange = viewModel::onQueryChanged,
                 hideCondition = true
             )
         }
@@ -54,10 +55,9 @@ fun LazyGridWithPagination(
     viewModel: HomeViewModel,
     goToDetail: (Long?) -> Unit
 ) {
-    val state = viewModel.uiState.collectAsStateWithLifecycle()
-    val items = state.value.items?.collectAsLazyPagingItems() //viewModel.pagerFlow.collectAsLazyPagingItems()
+    val pagedItems = viewModel.pokemonPagingData.collectAsLazyPagingItems()
 
-    if(items != null) {
+    if(pagedItems.itemCount > 0) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             modifier = modifier
@@ -68,10 +68,10 @@ fun LazyGridWithPagination(
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(
-                count = items.itemCount,
-                key = items.itemKey { it.id }
+                count = pagedItems.itemCount,
+                key = pagedItems.itemKey { it.id }
             ) { index ->
-                val pokemon = items[index]
+                val pokemon = pagedItems[index]
                 PokemonCardItem(pokemon, goToDetail) { id ->
                     viewModel.markAsFavorite(id ?: 0, pokemon?.isFavorite == true)
                 }

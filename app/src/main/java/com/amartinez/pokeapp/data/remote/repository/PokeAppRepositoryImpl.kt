@@ -5,10 +5,8 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.filter
 import androidx.paging.map
 import com.amartinez.pokeapp.data.local.dao.PokeAppDao
-import com.amartinez.pokeapp.data.local.database.PokeAppDB
 import com.amartinez.pokeapp.data.local.entity.AbilityEntity
 import com.amartinez.pokeapp.data.local.entity.PokemonEntity
 import com.amartinez.pokeapp.data.local.entity.StatEntity
@@ -20,7 +18,6 @@ import com.amartinez.pokeapp.domain.model.Pokemon
 import com.amartinez.pokeapp.domain.repository.PokeAppRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 class PokeAppRepositoryImpl @Inject constructor(
@@ -38,7 +35,10 @@ class PokeAppRepositoryImpl @Inject constructor(
         ),
         pagingSourceFactory = { dao.searchPokemon(filter) }
     ).flow.map { pagingData: PagingData<PokemonEntity> ->
-        pagingData.filter { it.name.startsWith(filter) }.map { entity -> entity.toDomain() }
+        pagingData.map { entity ->
+            Log.i("lala", "lala entity: ${entity.name}")
+            entity.toDomain()
+        }
     }
 
     override suspend fun fetchPokemon(): Boolean {
