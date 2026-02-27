@@ -1,4 +1,5 @@
-🚀 PokeApp Pro: Clean Architecture & Compose
+🚀 PokeApp Pro: 
+Clean Architecture & Compose
 PokeApp Pro es una aplicación nativa de Android diseñada como referencia para implementaciones de arquitecturas modernas. Es un ecosistema que demuestra el uso de Clean Architecture, flujos de datos asíncronos con Coroutines/Flow y una UI declarativa con Material 3.
 
 🛠️ Stack Tecnológico
