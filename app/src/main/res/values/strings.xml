@@ -15,11 +15,22 @@
     <string name="sign_in_user">User</string>
     <string name="sign_in_password">Password</string>
 
+    <string name="home_empty_dex_title">Empty Pokedex</string>
+    <string name="home_empty_dex_message">It appears that no data is available at this time.</string>
+    <string name="home_empty_search_title">No results</string>
+    <string name="home_empty_search_message">Even with a Super Rod, we couldn\'t find any traces of \"%1$s\". Check the spelling.</string>
+
+    <string name="sort_by_number">Number</string>
+    <string name="sort_by_name">Name</string>
+    <string name="sort_by_favorite">Favorite</string>
+
     <string name="detail_about_title">About</string>
     <string name="detail_weight">Weight</string>
     <string name="detail_height">Height</string>
     <string name="detail_abilities">Abilities</string>
     <string name="detail_stats_title">Base Stats</string>
+    <string name="detail_error_title">Signal Lost!</string>
+    <string name="detail_error_message">It seems Team Rocket is jamming our signal. We couldn\'t load the Pokémon data. Please check your internet or try again later.</string>
 
     <string name="weight_unit">kg</string>
     <string name="height_unit">m</string>

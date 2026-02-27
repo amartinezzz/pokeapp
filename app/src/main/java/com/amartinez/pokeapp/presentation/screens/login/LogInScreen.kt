@@ -3,8 +3,10 @@ package com.amartinez.pokeapp.presentation.screens.login
 import androidx.biometric.BiometricPrompt
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -13,17 +15,22 @@ import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amartinez.pokeapp.presentation.components.BodyStructure
+import com.amartinez.pokeapp.presentation.screens.login.component.LoginView
 import com.amartinez.pokeapp.presentation.utils.BiometricUtils.checkDeviceHasBiometrics
 import com.amartinez.pokeapp.presentation.utils.findActivity
 import com.amartinez.pokeapp.presentation.viewmodel.login.LogInViewModel
 
+/**
+ * LoginScreen.kt
+ * * Punto de entrada de autenticación para la aplicación.
+ */
 @Composable
 fun LogInScreen(
     navToHome: () -> Unit,
     navToRegister: () -> Unit
 ) {
     val viewModel: LogInViewModel = hiltViewModel()
-    val state = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val activity = remember(context) { context.findActivity() }
@@ -45,20 +52,24 @@ fun LogInScreen(
         .setNegativeButtonText("Use Password") // Fallback manual
         .build()
 
-    LaunchedEffect(state.value.isBiometricEnabled) {
-        if (state.value.isBiometricEnabled && activity != null && checkDeviceHasBiometrics(activity)) {
+    LaunchedEffect(uiState.isBiometricEnabled) {
+        if (uiState.isBiometricEnabled && activity != null && checkDeviceHasBiometrics(activity)) {
             biometricPrompt?.authenticate(promptInfo)
         }
     }
 
-    if (!state.value.isLogInSuccessful) {
+    if (!uiState.isLogInSuccessful) {
+        Scaffold { innerPadding ->
         Box(
-            modifier = Modifier.padding(top = 20.dp)
+            modifier = Modifier.padding(innerPadding)
         ) {
-            BodyStructure {
+            BodyStructure(
+                modifier = Modifier.padding(top = 20.dp)
+            ) {
                 LoginView(viewModel, navToRegister)
             }
         }
+            }
     } else {
         navToHome()
     }

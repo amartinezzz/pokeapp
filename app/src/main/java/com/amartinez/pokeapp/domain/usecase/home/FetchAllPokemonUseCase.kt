@@ -6,6 +6,6 @@ import javax.inject.Inject
 class FetchAllPokemonUseCase @Inject constructor(
     private val pokeAppRepository: PokeAppRepository,
 ) {
-    suspend operator fun invoke() : Boolean =
+    suspend operator fun invoke() : Int =
         pokeAppRepository.fetchPokemon()
 }

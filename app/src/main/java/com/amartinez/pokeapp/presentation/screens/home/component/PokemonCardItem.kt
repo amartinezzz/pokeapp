@@ -1,4 +1,4 @@
-package com.amartinez.pokeapp.presentation.components
+package com.amartinez.pokeapp.presentation.screens.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -26,15 +26,17 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.amartinez.pokeapp.R
 import com.amartinez.pokeapp.domain.model.Pokemon
+import com.amartinez.pokeapp.presentation.utils.capitalizedFirstChar
 import com.amartinez.pokeapp.presentation.utils.formatId
 
 @Composable
 fun PokemonCardItem(
     pokemon: Pokemon?,
     goToDetail: (Long?) -> Unit,
-    markAsFavorite: (Long?) -> Unit
+    markAsFavorite: (Long) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -68,11 +70,11 @@ fun PokemonCardItem(
                         start.linkTo(parent.start)
                     }
                     .clickable {
-                        markAsFavorite(pokemon?.id)
+                        markAsFavorite(pokemon?.id ?: 0)
                     },
-                imageVector = if(pokemon?.isFavorite == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                tint = if(pokemon?.isFavorite == true) MaterialTheme.colorScheme.primary else LocalContentColor.current,
-                contentDescription = null
+                imageVector = if (pokemon?.isFavorite == true) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                tint = if (pokemon?.isFavorite == true) MaterialTheme.colorScheme.primary else LocalContentColor.current,
+                contentDescription = "Favorite"
             )
 
 
@@ -86,9 +88,11 @@ fun PokemonCardItem(
                     },
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(pokemon?.imageUrl)
+                    .crossfade(true)
                     .diskCachePolicy(CachePolicy.ENABLED)
+                    .memoryCachePolicy(CachePolicy.ENABLED)
                     .build(),
-                contentDescription = pokemon?.name,
+                contentDescription = pokemon?.name?.capitalizedFirstChar(),
                 placeholder = painterResource(R.drawable.pokeball),
                 contentScale = ContentScale.Fit,
                 alignment = Alignment.TopStart
@@ -115,7 +119,7 @@ fun PokemonCardItem(
                         end.linkTo(parent.end)
                         verticalBias = 1.0f
                     },
-                text = pokemon?.name ?: "",
+                text = pokemon?.name?.capitalizedFirstChar() ?: "",
                 style = MaterialTheme.typography.titleMedium
             )
         }

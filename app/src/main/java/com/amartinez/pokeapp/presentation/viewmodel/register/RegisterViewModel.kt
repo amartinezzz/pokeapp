@@ -8,6 +8,7 @@ import com.amartinez.pokeapp.presentation.state.register.RegisterUiState
 import com.amartinez.pokeapp.presentation.utils.toSha256
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jakarta.inject.Inject
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -65,7 +66,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun onRegistrationComplete() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             registerUserAccessUseCase(
                 _uiState.value.user,
                 _uiState.value.password.toSha256()
@@ -80,7 +81,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun saveBiometricPreference(preference: Boolean) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             saveBiometricPreferenceUseCase(preference)
         }
     }

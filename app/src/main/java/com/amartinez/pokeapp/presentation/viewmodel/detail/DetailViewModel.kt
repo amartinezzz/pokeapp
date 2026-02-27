@@ -35,7 +35,8 @@ class DetailViewModel @Inject constructor(
                     it.copy(
                         pokemon = response,
                         isLoading = false,
-                        id = id
+                        id = id,
+                        error =  response.height == 0L
                     )
                 }
             }

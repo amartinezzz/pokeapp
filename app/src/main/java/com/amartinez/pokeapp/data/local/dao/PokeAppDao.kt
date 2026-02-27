@@ -17,8 +17,23 @@ interface PokeAppDao {
     @Query("SELECT COUNT(*) FROM pokemon_table")
     suspend fun getPokemonCount(): Int
 
-    @Query("SELECT * FROM pokemon_table WHERE name LIKE '%' || :filter || '%' ORDER BY id ASC")
-    fun searchPokemon(filter: String): PagingSource<Int, PokemonEntity>
+    @Query("SELECT * FROM pokemon_table WHERE name LIKE '%' || :query || '%' ORDER BY id ASC")
+    fun searchPokemonOrderByIdAsc(query: String): PagingSource<Int, PokemonEntity>
+
+    @Query("SELECT * FROM pokemon_table WHERE name LIKE '%' || :query || '%' ORDER BY id DESC")
+    fun searchPokemonOrderByIdDesc(query: String): PagingSource<Int, PokemonEntity>
+
+    @Query("SELECT * FROM pokemon_table WHERE name LIKE '%' || :query || '%' ORDER BY name ASC")
+    fun searchPokemonOrderByNameAsc(query: String): PagingSource<Int, PokemonEntity>
+
+    @Query("SELECT * FROM pokemon_table WHERE name LIKE '%' || :query || '%' ORDER BY name DESC")
+    fun searchPokemonOrderByNameDesc(query: String): PagingSource<Int, PokemonEntity>
+
+    @Query("SELECT * FROM pokemon_table WHERE name LIKE '%' || :query || '%' ORDER BY isFavorite ASC")
+    fun searchPokemonOrderByFavoriteAsc(query: String): PagingSource<Int, PokemonEntity>
+
+    @Query("SELECT * FROM pokemon_table WHERE name LIKE '%' || :query || '%' ORDER BY isFavorite DESC")
+    fun searchPokemonOrderByFavoriteDesc(query: String): PagingSource<Int, PokemonEntity>
 
     @Query("SELECT * FROM pokemon_table WHERE id = :id")
     fun getPokemonById(id: Long): Flow<PokemonEntity?>

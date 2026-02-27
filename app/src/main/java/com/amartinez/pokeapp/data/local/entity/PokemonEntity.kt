@@ -1,6 +1,7 @@
 package com.amartinez.pokeapp.data.local.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.amartinez.pokeapp.domain.model.Ability
 import com.amartinez.pokeapp.domain.model.Pokemon
@@ -8,7 +9,7 @@ import com.amartinez.pokeapp.domain.model.PropertyDetail
 import com.amartinez.pokeapp.domain.model.Stat
 import com.amartinez.pokeapp.domain.model.Type
 
-@Entity(tableName = "pokemon_table")
+@Entity(tableName = "pokemon_table", indices = [Index(value = ["name"])])
 data class PokemonEntity(
     @PrimaryKey val id: Long,
     val name: String = "",

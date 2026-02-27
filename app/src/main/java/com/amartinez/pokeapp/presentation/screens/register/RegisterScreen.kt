@@ -1,17 +1,26 @@
 package com.amartinez.pokeapp.presentation.screens.register
 
 import androidx.biometric.BiometricPrompt
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.amartinez.pokeapp.presentation.components.BodyStructure
+import com.amartinez.pokeapp.presentation.screens.register.components.RegisterView
 import com.amartinez.pokeapp.presentation.utils.BiometricUtils.checkDeviceHasBiometrics
 import com.amartinez.pokeapp.presentation.utils.findActivity
 import com.amartinez.pokeapp.presentation.viewmodel.register.RegisterViewModel
 
+
+/**
+ * RegisterScreen.kt
+ * * Pantalla encargada del flujo de creación de nuevas cuentas de usuario.
+ */
 @Composable
 fun RegisterScreen(
     navToHome: () -> Unit
@@ -46,8 +55,12 @@ fun RegisterScreen(
         .setNegativeButtonText("Skip")
         .build()
 
-    BodyStructure {
-        RegisterView(viewModel)
+    Scaffold { innerPadding ->
+        BodyStructure(
+            modifier = Modifier.padding(innerPadding)
+        ) {
+            RegisterView(viewModel)
+        }
     }
 
     if (state.value.isUserCreated) {

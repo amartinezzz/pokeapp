@@ -1,10 +1,10 @@
 package com.amartinez.pokeapp.presentation.state.home
 
-import androidx.paging.PagingData
-import com.amartinez.pokeapp.domain.model.Pokemon
-import kotlinx.coroutines.flow.Flow
+import com.amartinez.pokeapp.domain.model.SortOption
 
 data class HomeUiState(
-    val filter: String = "",
-    val items:  Flow<PagingData<Pokemon>>? = null
+    val isLoading: Boolean = true,
+    val count: Int = 0,
+    val showDialog: Boolean = false,
+    val sortBy: SortOption = SortOption.NUMBER_ASC
 )

@@ -69,7 +69,7 @@ class LogInViewModel @Inject constructor(
     }
 
     fun logIn() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val user = _uiState.value.user
             val password = _uiState.value.password
 

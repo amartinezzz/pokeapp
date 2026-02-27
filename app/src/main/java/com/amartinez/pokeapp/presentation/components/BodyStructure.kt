@@ -22,11 +22,12 @@ import com.amartinez.pokeapp.R
 
 @Composable
 fun BodyStructure(
+    modifier: Modifier = Modifier,
     header: @Composable () -> Unit = {},
     content: @Composable () -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.primary)
             .padding(12.dp)

@@ -2,11 +2,8 @@ package com.amartinez.pokeapp
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
 import androidx.fragment.app.FragmentActivity
+import androidx.navigation.compose.rememberNavController
 import com.amartinez.pokeapp.presentation.navigation.NavigationWrapper
 import com.amartinez.pokeapp.ui.theme.PokeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,13 +15,8 @@ class MainActivity : FragmentActivity() {
 
         setContent {
             PokeAppTheme {
-                Scaffold { innerPadding ->
-                    Box(
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        NavigationWrapper()
-                    }
-                }
+                val navController = rememberNavController()
+                NavigationWrapper(navController = navController)
             }
         }
     }

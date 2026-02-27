@@ -1,4 +1,4 @@
-package com.amartinez.pokeapp.presentation.screens.register
+package com.amartinez.pokeapp.presentation.screens.register.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -28,7 +29,7 @@ import com.amartinez.pokeapp.ui.theme.DarkGray
 fun RegisterView(
     viewModel: RegisterViewModel
 ) {
-    val state = viewModel.uiState.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -45,14 +46,14 @@ fun RegisterView(
         )
 
         TextFieldComponent(
-            value = state.value.user,
+            value = uiState.user,
             onValueChange = viewModel::onEmailChange,
             placeholder = stringResource(R.string.sign_up_user),
             icon = Icons.Default.Email
         )
 
         TextFieldComponent(
-            value = state.value.password,
+            value = uiState.password,
             onValueChange = viewModel::onPasswordChange,
             placeholder = stringResource(R.string.sign_up_password),
             hideText = true,
@@ -60,14 +61,14 @@ fun RegisterView(
         )
 
         TextFieldComponent(
-            value = state.value.confirmPassword,
+            value = uiState.confirmPassword,
             onValueChange = viewModel::onConfirmPasswordChange,
             placeholder = stringResource(R.string.sign_up_confirm_password),
             hideText = true,
             icon = Icons.Default.Done
         )
 
-        val enableButton = state.value.enableButton
+        val enableButton = uiState.enableButton
         ButtonComponent(
             text = R.string.sign_up_continue,
             enabled = enableButton,

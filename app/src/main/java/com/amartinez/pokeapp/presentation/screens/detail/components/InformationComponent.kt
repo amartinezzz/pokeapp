@@ -1,4 +1,4 @@
-package com.amartinez.pokeapp.presentation.components
+package com.amartinez.pokeapp.presentation.screens.detail.components
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image

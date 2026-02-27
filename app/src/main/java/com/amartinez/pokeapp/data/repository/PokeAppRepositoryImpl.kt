@@ -1,4 +1,4 @@
-package com.amartinez.pokeapp.data.remote.repository
+package com.amartinez.pokeapp.data.repository
 
 import android.util.Log
 import androidx.paging.ExperimentalPagingApi
@@ -15,6 +15,7 @@ import com.amartinez.pokeapp.data.local.entity.toDomain
 import com.amartinez.pokeapp.data.remote.api.PokeAppApi
 import com.amartinez.pokeapp.data.remote.dto.toEntity
 import com.amartinez.pokeapp.domain.model.Pokemon
+import com.amartinez.pokeapp.domain.model.SortOption
 import com.amartinez.pokeapp.domain.repository.PokeAppRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -26,24 +27,33 @@ class PokeAppRepositoryImpl @Inject constructor(
 ) : PokeAppRepository {
 
     @OptIn(ExperimentalPagingApi::class)
-    override fun searchPokemonList(filter: String) = Pager(
+    override suspend fun searchPokemonList(query: String, sortBy: SortOption) = Pager(
         config = PagingConfig(
             pageSize = 21,
             prefetchDistance = 5,
             initialLoadSize = 40,
             enablePlaceholders = true
         ),
-        pagingSourceFactory = { dao.searchPokemon(filter) }
+        pagingSourceFactory = {
+            dao.searchPokemonOrderByIdAsc(query)
+            when (sortBy) {
+                SortOption.NUMBER_ASC -> dao.searchPokemonOrderByIdAsc(query)
+                SortOption.NUMBER_DESC -> dao.searchPokemonOrderByIdDesc(query)
+                SortOption.NAME_ASC -> dao.searchPokemonOrderByNameAsc(query)
+                SortOption.NAME_DESC -> dao.searchPokemonOrderByNameDesc(query)
+                SortOption.FAVORITE_ASC -> dao.searchPokemonOrderByFavoriteAsc(query)
+                SortOption.FAVORITE_DESC -> dao.searchPokemonOrderByFavoriteDesc(query)
+            }
+        }
     ).flow.map { pagingData: PagingData<PokemonEntity> ->
         pagingData.map { entity ->
-            Log.i("lala", "lala entity: ${entity.name}")
             entity.toDomain()
         }
     }
 
-    override suspend fun fetchPokemon(): Boolean {
+    override suspend fun fetchPokemon(): Int {
         val count = dao.getPokemonCount()
-        if (count > 0) return true
+        if (count > 0) return count
 
         return try {
             val response = api.fetchPokemon(limit = 1100, offset = 0)
@@ -58,9 +68,9 @@ class PokeAppRepositoryImpl @Inject constructor(
             }
 
             dao.insert(entities!!)
-            true
-        } catch (e: Exception) {
-            false
+            entities.size
+        } catch (_: Exception) {
+            0
         }
     }
 
@@ -69,7 +79,9 @@ class PokeAppRepositoryImpl @Inject constructor(
         val isIncomplete = localPokemon == null || localPokemon.height == 0L
 
         if (isIncomplete) {
-            getPokemonDetailByIdFromApi(id)
+            try {
+                getPokemonDetailByIdFromApi(id)
+            } catch (_: Exception) {}
         }
 
         return dao.getPokemonById(id)
