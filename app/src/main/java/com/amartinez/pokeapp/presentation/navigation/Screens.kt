@@ -12,7 +12,4 @@ object Register
 object Home
 
 @Serializable
-object Favorites
-
-@Serializable
 data class Detail(val id: Long?)

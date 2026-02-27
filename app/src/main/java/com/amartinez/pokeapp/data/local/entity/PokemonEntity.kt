@@ -71,7 +71,3 @@ fun PokemonEntity.toDomain(): Pokemon {
         isFavorite = isFavorite
     )
 }
-
-fun PokemonEntity.hasData(): Boolean {
-    return abilities.isEmpty()
-}
